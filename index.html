@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <body>
+  <title>program</title>
+  <h1>P2Pプラグイン前</h1>  
+  <s1>import socket</s1>
+
+    <p>my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</p>
+    <p1>my_socket.connect(('10.1.1.27', 50030))</p1>
+    my_text = "Hello! This is test message from my sample client!"
+    my_socket.sendall(my_text.encode('utf-8'))
+    
+    from concurrent.futures import ThreadPoolExecutor
+     import socket
+     import os
+
+
+      def __handle_message(args_tuple):
+
+      conn, addr, data_sum = args_tuple
+      while True:
+          data = conn.recv(1024)
+          data_sum = data_sum + data.decode('utf-8')
+
+          if not data:
+              break
+
+      if data_sum != '':
+          print(data_sum)
+
+
+      def __get_myip():
+      s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+      s.connect(('8.8.8.8', 80))
+      return s.getsockname()[0]
+
+
+      def main():
+
+      # AF_INET : IPv4 
+      # SOCK_STREAM : TCP/IP
+      my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+      executor = ThreadPoolExecutor(max_workers=os.cpu_count())
+      myhost = __get_myip()
+      print('my ip address is now  ...', myhost)
+      my_socket.bind((myhost, 50030))
+    
+      my_socket.listen(1)
+
+      while True:
+          print('Waiting for the connection ...')
+          conn, addr = my_socket.accept()
+          print('Connected by .. ', addr)
+          data_sum = ''
+          executor.submit(__handle_message, (conn, addr, data_sum))
+
+
+           if __name__ == '__main__':
+          main()
+    
+           from distutils.version import StrictVersion
+          import json
+
+          PROTOCOL_NAME = 'simple_bitcoin_protocol'
+          MY_VERSION = '0.1.0'
+
+          MSG_ADD = 0
+          MSG_REMOVE = 1
+          MSG_CORE_LIST = 2
+          MSG_REQUEST_CORE_LISt = 3
+          MSG_PING = 4
+          MSG_ADD_AS_EDGE = 5
+          MSG_REMOVE_EDGE = 6
+
+          ERR_PROTOCOL_UNMATCH = 0
+          ERR_VERSION_UNMATCH = 0
+          OK_WITH_PAYLOAD = 2
+          OK_WITHOUT_PAYLOAD = 3
+
+          class M2:
+             def __init__(self);
+                  print('Initialzing M2...')
+
+             def build(self, msg_type, payload=None):
+
+                 message - {
+                  'protocol': PROTOCOL_NAME,
+                  'version': MY_VERSION,
+                 }
+
+                 if payload is not None:
+                      message['payload'] = payload
+
+                 return json.dumps(message)
+
+           def parse(self, msg):
+
+               msg = json.loads(msg)
+               msg_ver = StrictVersion(msg['version'])
+
+               cmd = msg.get('msg_type')
+               payload = msgget('payload')
+
+               if msg['protocol'] != PROTOCOL_NAME:
+                   return ('error',ERR_PROTOCOL_UNMATCH, None, None)
+               elif msg_ver > StrictVersion(MY_VERSION):
+                   return ('error', ERR_VERSION_UNMATCH, None, None)
+               elif cmd == MSG_CORE_LIST:
+                   return ('ok' , OK_WITH_PAYLOAD, cmd, None)
+               else:
+                   return ('ok', OK_WITHOUT_PAYLOAD, cmd, None)
+                </h1>           
+
+
+    </body>
+ 
+  </head> 
+</html>
